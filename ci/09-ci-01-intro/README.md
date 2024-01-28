@@ -43,8 +43,10 @@
 
 ## Bug workflow
 ![](./image/workflow-bugfix.png)
+
 [Bug workflow xml file for import](./workflow_xml/Bugfix.xml)
 
 ## Other tasks workflow
 ![](./image/workflow-other.png)
+
 [Other workflow xml file for import](./workflow_xml/Default%20develop%20workflow.xml)
