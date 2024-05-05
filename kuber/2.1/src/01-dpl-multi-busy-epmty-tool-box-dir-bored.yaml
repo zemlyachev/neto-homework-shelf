@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netology
+  labels:
+    app: netology
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netology
+  template:
+    metadata:
+      labels:
+        app: netology
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          command: [ 'sh', '-c', 'while true;do echo "This is my dummy text" >> /busybox/test.txt; sleep 5; done;' ]
+          volumeMounts:
+            - name: temp
+              mountPath: "/busybox"
+        - name: multitool
+          image: wbitt/network-multitool
+          volumeMounts:
+            - name: temp
+              mountPath: "/multitool"
+      volumes:
+        - name: temp
+          emptyDir: {}
