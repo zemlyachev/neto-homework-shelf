@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netology
+  labels:
+    app: netology
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netology
+  template:
+    metadata:
+      labels:
+        app: netology
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              'while true;do echo "This is my dummy text" >> /busybox/test.txt; sleep 5; done;',
+            ]
+          volumeMounts:
+            - name: vol
+              mountPath: "/busybox"
+        - name: multitool
+          image: wbitt/network-multitool
+          volumeMounts:
+            - name: vol
+              mountPath: "/multitool"
+      volumes:
+        - name: vol
+          persistentVolumeClaim:
+            claimName: pvc-manual
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-manual
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Mi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: volume
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 3Mi
+  hostPath:
+    path: /data/pv1
+  persistentVolumeReclaimPolicy: Delete
